@@ -3,6 +3,9 @@ package com.javatechie.service;
 import com.javatechie.entity.Product;
 import com.javatechie.respository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,4 +59,46 @@ public class ProductService {
         repository.deleteById(id);
         return repository.count();
     }
+
+    //OPERATOR
+
+    public List<Product> getProductsByMultiplePriceValue(List<Double> prices) {
+        return repository.findByPriceIn(prices);
+    }
+
+    public List<Product> getProductsWithinPriceRange(double minPrice, double maxPrice) {
+        return repository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    public List<Product> getProductsWithHigherPrice(double price) {
+        return repository.findByPriceGreaterThan(price);
+    }
+
+    public List<Product> getProductsWithLessPrice(double price) {
+        return repository.findByPriceLessThan(price);
+    }
+
+    public List<Product> getProductsWithLike(String name) {
+        return repository.findByNameIgnoreCaseContaining(name);
+    }
+
+    //sorting
+    public List<Product> getProductsWithSorting(String fieldName) {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, fieldName));
+    }
+
+    //pagination
+    public Page<Product> getProductsWithPageResponse(int offset, int limit) {
+        return repository.findAll(PageRequest.of(offset, limit));
+    }
+
+    public Page<Product> getProductsWithSortingAndPagination(String fieldName, int offset, int limit) {
+        return repository
+                .findAll(
+                        PageRequest.of(offset, limit)
+                                .withSort(Sort.by(fieldName)
+                                ));
+    }
+
+
 }

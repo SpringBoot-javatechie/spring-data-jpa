@@ -20,4 +20,18 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     //position based parameter
     //@Query("from PRODUCT_TABLE p where p.price= :price") //named parameter base index
     List<Product> getProductByPrice(double price);
+
+
+    //prefix + field + operator
+
+    List<Product> findByPriceIn(List<Double> prices);
+
+    List<Product> findByPriceBetween(double minPrice, double maxPrice);
+
+    List<Product> findByPriceGreaterThan(double price);
+
+    List<Product> findByPriceLessThan(double price);
+
+    List<Product> findByNameIgnoreCaseContaining(String name);
+
 }
